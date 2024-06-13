@@ -15,14 +15,16 @@ def habit_reminder_func():
     habits = Habit.objects.all()
     now = datetime.now()
     warning_time = (now + timedelta(minutes=10)).time().replace(tzinfo=tz('UTC'))
+    tg_username = ''
+    data = requests.get(url + "getupdates").json()
 
     for habit in habits:
         habit_time = habit.time.replace(tzinfo=tz('UTC'))
         user = CustomUser.objects.get(pk=habit.user.id)
 
         if warning_time > habit_time and now.time().replace(tzinfo=tz('UTC')) < habit_time:
-            data = requests.get(url + "getupdates").json()
-            tg_username = data['result'][0]['message']['chat']['username']
+            if data['result'][0]['message']['chat']:
+                tg_username = data['result'][0]['message']['chat']['username']
 
             if tg_username == user.telegram_username and user.tg_chat_id is None:
                 user.tg_chat_id = data['result'][0]['message']['chat']['id']
