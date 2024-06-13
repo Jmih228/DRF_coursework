@@ -18,7 +18,6 @@ class Habit(models.Model):
                                           help_text='Введите частоту выполнения привычки в днях')
     execution_time = models.SmallIntegerField(default=120, verbose_name='Время на выполнение')
     is_public = models.BooleanField(verbose_name='Признак публичности')
-    telegram_username = models.CharField(max_length=200, verbose_name='Имя пользователя в телеграмме')
 
     class Meta:
 

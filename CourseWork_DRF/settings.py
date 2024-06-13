@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-flh=_z7^(#o=626$g-ss%%+f7z-t&&l2@2kj5+ow3!z)3e)ug*'
+SECRET_KEY = os.getenv('DRF_COURSEWORK_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = []
 
@@ -66,8 +66,7 @@ ROOT_URLCONF = 'CourseWork_DRF.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -89,9 +88,11 @@ WSGI_APPLICATION = 'CourseWork_DRF.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DRF_coursework',
-        'USER': 'postgres',
-        'PASSWORD': 'hghghg777'
+        'NAME': os.getenv('DRF_COURSEWORK_DB_NAME'),
+        'USER': os.getenv('DRF_COURSEWORK_DB_USER'),
+        'PASSWORD': os.getenv('DRF_COURSEWORK_DB_PASSWORD'),
+        'HOST': os.getenv('DRF_COURSEWORK_DB_HOST'),
+        'PORT': os.getenv('DRF_COURSEWORK_DB_PORT'),
     }
 }
 
@@ -166,10 +167,10 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOW_ALL_ORIGINS = False
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = 'Europe/Moscow'
@@ -179,5 +180,12 @@ CELERY_TASK_TRACK_STARTED = True
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# CELERY_BEAT_SCHEDULE = {
+#     "task-name": {
+#         "task": "habits.tasks.habit_reminder_func",  # Путь к задаче
+#         "schedule": timedelta(minutes=5),  # Расписание
+#     },
+# }
 
 TG_BOT_TOKEN = os.getenv('TG_HABIT_BOT')

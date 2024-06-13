@@ -21,8 +21,9 @@ class ActionTimeValidator:
         self.execution_time = execution_time
 
     def __call__(self, value):
-        execution_time = dict(value).get(self.execution_time)
-
+        execution_time = dict(value).get(self.execution_time, -1)
+        if execution_time < 0:
+            raise ValidationError('Введите время на выполнение действия')
         if execution_time > 120:
             raise ValidationError('Нельзя задавать на выполнение привычки время более 120 секунд')
 
@@ -33,8 +34,10 @@ class ConsistentPracticeValidator:
         self.rep_period = rep_period
 
     def __call__(self, value):
-        rep_period = dict(value).get(self.rep_period)
+        rep_period = dict(value).get(self.rep_period, -1)
 
+        if rep_period < 0:
+            raise ValidationError('Введите периодичность привычки')
         if rep_period > 7:
             raise ValidationError('Нельзя задавать периодичность выполнения привычки более 7 дней')
 
