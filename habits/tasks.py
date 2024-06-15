@@ -23,7 +23,7 @@ def habit_reminder_func():
         user = CustomUser.objects.get(pk=habit.user.id)
 
         if warning_time > habit_time and now.time().replace(tzinfo=tz('UTC')) < habit_time:
-            if data:
+            if data.get('result'):
                 tg_username = data['result'][0]['message']['chat']['username']
 
             if tg_username == user.telegram_username and user.tg_chat_id is None:

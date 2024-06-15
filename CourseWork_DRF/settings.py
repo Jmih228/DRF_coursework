@@ -181,11 +181,13 @@ CELERY_TASK_TRACK_STARTED = True
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-# CELERY_BEAT_SCHEDULE = {
-#     "task-name": {
-#         "task": "habits.tasks.habit_reminder_func",  # Путь к задаче
-#         "schedule": timedelta(minutes=5),  # Расписание
-#     },
-# }
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BEAT_SCHEDULE = {
+    "tg_habit_notification": {
+        "task": "habits.tasks.habit_reminder_func",  # Путь к задаче
+        "schedule": timedelta(minutes=1),  # Расписание
+    },
+}
 
 TG_BOT_TOKEN = os.getenv('TG_HABIT_BOT')
